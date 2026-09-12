@@ -1,5 +1,6 @@
 from BankAccount import BankAccount
 from AccountRepository import AccountRepository
+from FileAccountRepository import FileAccountRepository
 from NotificationService import NotificationService
 from StatementGenerator import StatementGenerator
 from SavingsInterestPolicy import SavingsInterestPolicy
@@ -17,7 +18,7 @@ def main():
     account.withdraw(500)
     account.deposit(250)
 
-    repository = AccountRepository()
+    repository: AccountRepository = FileAccountRepository()
     notification_service = NotificationService()
     statement_generator = StatementGenerator()
 
@@ -36,10 +37,11 @@ def main():
     salary_policy = SalaryInterestPolicy()
     print(f"Salary interest: Rs. {salary_policy.calculate(salary_account.get_balance())}")
 
-    bank = Bank(NotificationService())
+    bank = Bank(repository, NotificationService())
+    bank.save_account(account)
     bank.notify("Bank notification sent using the injected notification service.")
 
-    bank = Bank(SMSNotificationService())
+    bank = Bank(repository, SMSNotificationService())
     bank.notify("Bank notification sent using the SMS notification service.")
 
 
