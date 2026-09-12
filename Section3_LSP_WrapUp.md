@@ -1,0 +1,3 @@
+# Section 3 — LSP Wrap-up
+
+Making `FixedDepositAccount` implement `Withdrawable` and throw a not-supported exception is the wrong fix because the type would promise a withdrawal operation that it cannot actually fulfill. The LSP substitution rule says a subtype must be usable wherever its base type is expected without breaking the caller's assumptions. A fixed deposit is an `Account`, but it is not a `Withdrawable` account, so withdrawal code should depend on the narrower `Withdrawable` contract. The final design keeps withdrawal only on `SavingsAccount` and `CurrentAccount`, so no class overrides a method just to say that the operation is unsupported.
