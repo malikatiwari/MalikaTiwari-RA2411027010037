@@ -1,6 +1,8 @@
-from BankAccount import BankAccount
+from Account import Account
 
 
-class FixedDepositAccount(BankAccount):
-    def withdraw(self, amount, entered_pin=None):
-        raise NotImplementedError("UnsupportedOperationException: Fixed deposits cannot be withdrawn early")
+class FixedDepositAccount(Account):
+    """Fixed deposits are accounts, but they do not promise withdrawal."""
+
+    def __init__(self, account_number, name, age, balance):
+        super().__init__(account_number, name, age, balance, "Fixed Deposit")
