@@ -11,9 +11,12 @@ class BankAccount:
     # 8. Interest calculation rules change.
     # 9. Statement formatting or statement contents change.
 
+    # Job description for the SRP version:
+    # BankAccount is responsible only for account operations such as deposit,
+    # withdrawal, and reporting the current account information.
+
     def __init__(self, account_number, name, age, balance, account_type):
 
-        # Validation logic mixed directly into the constructor
         if age < 18:
             print("Age was below 18, correcting to 18")
             age = 18
@@ -32,20 +35,16 @@ class BankAccount:
         self.balance = balance
         self.account_type = account_type
         self.status = "Active"
-
         self.pin = None
         self.transaction_log = []
 
     def deposit(self, amount):
-
         if self.status != "Active":
             print("Account is not active")
             return False
-
         if amount <= 0:
             print("Invalid deposit amount")
             return False
-
         self.balance += amount
         self.transaction_log.append(
             f"DEPOSIT: Rs. {amount} | New balance: {self.balance}"
@@ -59,28 +58,20 @@ class BankAccount:
         return True
 
     def withdraw(self, amount, entered_pin):
-
         if self.status != "Active":
             print("Account is not active")
             return False
-
         if self.pin is not None:
             if entered_pin is None or entered_pin != self.pin:
                 print("Incorrect PIN")
                 return False
-
         if amount <= 0:
             print("Invalid withdrawal amount")
             return False
-
-        minimum_balance = (
-            500.0 if self.account_type == "Savings" else 1000.0
-        )
-
+        minimum_balance = 500.0 if self.account_type == "Savings" else 1000.0
         if self.balance - amount < minimum_balance:
             print("Withdrawal would breach minimum balance")
             return False
-
         self.balance -= amount
         self.transaction_log.append(
             f"WITHDRAW: Rs. {amount} | New balance: {self.balance}"
@@ -123,8 +114,7 @@ class BankAccount:
             return self.balance * 0.04
         elif self.account_type == "Current":
             return self.balance * 0.01
-        else:
-            return 0.0
+        return 0.0
 
     def save_to_database(self):
         print(f"[DB] Saving account {self.account_number} to MySQL...")
