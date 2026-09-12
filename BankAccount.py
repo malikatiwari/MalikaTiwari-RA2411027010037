@@ -16,19 +16,13 @@ class BankAccount:
     # withdrawal, and reporting the current account information.
 
     def __init__(self, account_number, name, age, balance, account_type):
-
         if age < 18:
             print("Age was below 18, correcting to 18")
             age = 18
-
         minimum_balance = 500.0 if account_type == "Savings" else 1000.0
-
         if balance < minimum_balance:
-            print(
-                f"Initial balance below minimum, correcting to {minimum_balance}"
-            )
+            print(f"Initial balance below minimum, correcting to {minimum_balance}")
             balance = minimum_balance
-
         self.account_number = account_number
         self.name = name
         self.age = age
@@ -46,25 +40,16 @@ class BankAccount:
             print("Invalid deposit amount")
             return False
         self.balance += amount
-        self.transaction_log.append(
-            f"DEPOSIT: Rs. {amount} | New balance: {self.balance}"
-        )
-        self.send_email(
-            self.name,
-            f"Your deposit of Rs. {amount} was successful. "
-            f"New balance: {self.balance}"
-        )
-        self.save_to_database()
+        self.transaction_log.append(f"DEPOSIT: Rs. {amount} | New balance: {self.balance}")
         return True
 
-    def withdraw(self, amount, entered_pin):
+    def withdraw(self, amount, entered_pin=None):
         if self.status != "Active":
             print("Account is not active")
             return False
-        if self.pin is not None:
-            if entered_pin is None or entered_pin != self.pin:
-                print("Incorrect PIN")
-                return False
+        if self.pin is not None and (entered_pin is None or entered_pin != self.pin):
+            print("Incorrect PIN")
+            return False
         if amount <= 0:
             print("Invalid withdrawal amount")
             return False
@@ -73,64 +58,8 @@ class BankAccount:
             print("Withdrawal would breach minimum balance")
             return False
         self.balance -= amount
-        self.transaction_log.append(
-            f"WITHDRAW: Rs. {amount} | New balance: {self.balance}"
-        )
-        self.send_email(
-            self.name,
-            f"Your withdrawal of Rs. {amount} was successful. "
-            f"New balance: {self.balance}"
-        )
-        self.save_to_database()
+        self.transaction_log.append(f"WITHDRAW: Rs. {amount} | New balance: {self.balance}")
         return True
-
-    def close_account(self):
-        if self.status == "Inactive":
-            return False
-        self.status = "Inactive"
-        self.send_email(self.name, "Your account has been closed.")
-        self.save_to_database()
-        return True
-
-    def reopen_account(self):
-        if self.status == "Active":
-            return False
-        self.status = "Active"
-        self.send_email(self.name, "Your account has been reopened.")
-        self.save_to_database()
-        return True
-
-    def set_pin(self, new_pin):
-        if 1000 <= new_pin <= 9999:
-            self.pin = new_pin
-            return True
-        return False
-
-    def verify_pin(self, entered_pin):
-        return self.pin is not None and self.pin == entered_pin
-
-    def calculate_interest(self):
-        if self.account_type == "Savings":
-            return self.balance * 0.04
-        elif self.account_type == "Current":
-            return self.balance * 0.01
-        return 0.0
-
-    def save_to_database(self):
-        print(f"[DB] Saving account {self.account_number} to MySQL...")
-
-    def send_email(self, recipient, message):
-        print(f"[EMAIL] To: {recipient} | {message}")
-
-    def print_statement(self):
-        print(
-            f"---- Statement for Account #{self.account_number} "
-            f"({self.name}) ----"
-        )
-        for entry in self.transaction_log:
-            print(entry)
-        print(f"Current Balance: Rs. {self.balance}")
-        print("-----------------------------------------------------")
 
     def get_account_number(self):
         return self.account_number
