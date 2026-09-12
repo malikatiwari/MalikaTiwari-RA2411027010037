@@ -2,6 +2,8 @@ from BankAccount import BankAccount
 from AccountRepository import AccountRepository
 from NotificationService import NotificationService
 from StatementGenerator import StatementGenerator
+from SavingsInterestPolicy import SavingsInterestPolicy
+from CurrentInterestPolicy import CurrentInterestPolicy
 
 
 def main():
@@ -19,6 +21,12 @@ def main():
     notification_service.send("Account transactions completed successfully.")
 
     print(statement_generator.generate(account))
+
+    savings_policy = SavingsInterestPolicy()
+    current_policy = CurrentInterestPolicy()
+
+    print(f"Savings interest: Rs. {savings_policy.calculate(account.get_balance())}")
+    print(f"Current interest: Rs. {current_policy.calculate(account.get_balance())}")
 
 
 if __name__ == "__main__":
