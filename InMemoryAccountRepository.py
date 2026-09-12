@@ -1,4 +1,7 @@
-class InMemoryAccountRepository:
+from AccountRepository import AccountRepository
+
+
+class InMemoryAccountRepository(AccountRepository):
     def __init__(self):
         self.accounts = []
 
